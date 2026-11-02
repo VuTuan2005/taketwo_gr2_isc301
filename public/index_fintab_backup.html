@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TakeTwo - Nền Tảng Pass Đồ Cũ Sinh Viên & Ký Quỹ Escrow</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>♻️</text></svg>">
+</head>
+<body>
+
+  <!-- ================= TOPBAR ================= -->
+  <header class="topbar">
+    <div class="topbar-container">
+      <a href="#" class="brand" onclick="switchTab('products'); return false;">
+        <div class="brand-logo">♻️</div>
+        <div class="brand-text">
+          <h1>TakeTwo</h1>
+          <span>Sàn Pass Đồ Cũ Sinh Viên Hà Nội</span>
+        </div>
+      </a>
+
+      <!-- Switcher tài khoản phục vụ thuyết trình Demo -->
+      <div class="account-selector">
+        <label for="userSelect">👤 Tài khoản demo:</label>
+        <select id="userSelect" onchange="onUserSwitch(this.value)">
+          <!-- Rendered dynamically -->
+        </select>
+      </div>
+    </div>
+  </header>
+
+  <!-- ================= VÍ TAKETWO HERO BAR (E-WALLET WIDGET) ================= -->
+  <section class="wallet-hero">
+    <div class="wallet-container">
+      <div class="wallet-info-group">
+        
+        <!-- Card 1: Số dư khả dụng -->
+        <div class="wallet-card">
+          <div class="wallet-card-icon">💰</div>
+          <div class="wallet-card-text">
+            <div class="label">Số Dư Ví TakeTwo</div>
+            <div id="heroWalletBalance" class="value highlight">0 đ</div>
+            <div class="subtext">Sẵn sàng mua đồ hoặc rút tiền</div>
+          </div>
+        </div>
+
+        <!-- Card 2: Tiền tạm giữ Escrow -->
+        <div class="wallet-card">
+          <div class="wallet-card-icon">🔒</div>
+          <div class="wallet-card-text">
+            <div class="label">Két Escrow Tạm Giữ</div>
+            <div id="heroWalletEscrow" class="value">0 đ</div>
+            <div class="subtext">Đang bảo vệ giao dịch an toàn</div>
+          </div>
+        </div>
+
+        <!-- Card 3: Số lượt đẩy bài VIP -->
+        <div class="wallet-card">
+          <div class="wallet-card-icon">🚀</div>
+          <div class="wallet-card-text">
+            <div class="label">Lượt Đẩy Bài VIP</div>
+            <div id="heroBoostCredits" class="value boost">0 lượt</div>
+            <div class="subtext">Đưa tin lên Top 1 ngay tức thì</div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Quick Actions for Presentation Demo -->
+      <div class="wallet-actions">
+        <button class="btn-quick-topup" onclick="quickTopup(100000)">
+          ⚡ Nạp nhanh +100.000đ
+        </button>
+        <button class="btn-quick-topup" onclick="quickTopup(500000)">
+          ⚡ Nạp nhanh +500.000đ
+        </button>
+        <button class="btn-vip-boost" onclick="openBoostModal()">
+          💎 Mua Gói Đẩy VIP
+        </button>
+        <button class="btn-post-item" onclick="openPostModal()">
+          ➕ Đăng Tin Pass Đồ
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= MAIN NAVIGATION TABS ================= -->
+  <div class="nav-tabs-wrapper">
+    <div class="nav-tabs-container">
+      <button class="nav-tab-btn active" data-tab="products" onclick="switchTab('products')">
+        🛍️ Chợ Đồ Cũ Sinh Viên
+        <span id="tabCountProducts" class="nav-badge-pill">8 đồ</span>
+      </button>
+
+      <button class="nav-tab-btn" data-tab="orders" onclick="switchTab('orders')">
+        📦 Quản Lý Đơn Hàng & Vận Chuyển
+        <span id="tabCountOrders" class="nav-badge-pill warning">1 đơn SLA</span>
+      </button>
+
+      <button class="nav-tab-btn" data-tab="wallet" onclick="switchTab('wallet')">
+        💳 Ví TakeTwo & Lịch Sử Giao Dịch
+        <span id="tabCountTxs" class="nav-badge-pill">4 GD</span>
+      </button>
+
+      <button class="nav-tab-btn" data-tab="business" onclick="switchTab('business')">
+        💎 Mô Hình Kinh Doanh (Tâm Lý Học & Gói Đẩy)
+      </button>
+    </div>
+  </div>
+
+  <!-- ================= MAIN VIEWPORT ================= -->
+  <main class="main-content">
+
+    <!-- ================= VIEW 1: CHỢ ĐỒ CŨ SINH VIÊN ================= -->
+    <section id="view-products" class="view-section active">
+      
+      <!-- Toolbar lọc danh mục & tìm kiếm -->
+      <div class="filter-toolbar">
+        <div class="category-pills">
+          <button class="cat-pill-btn active" data-cat="all" onclick="filterCategory('all', this)">Tất cả đồ cũ</button>
+          <button class="cat-pill-btn" data-cat="books" onclick="filterCategory('books', this)">📚 Giáo trình & Sách</button>
+          <button class="cat-pill-btn" data-cat="living" onclick="filterCategory('living', this)">🛏️ Đồ phòng trọ & KTX</button>
+          <button class="cat-pill-btn" data-cat="electronics" onclick="filterCategory('electronics', this)">💻 Điện tử & Phụ kiện</button>
+          <button class="cat-pill-btn" data-cat="fashion" onclick="filterCategory('fashion', this)">👕 Đồng phục & Thời trang</button>
+        </div>
+
+        <div class="search-box">
+          <span>🔍</span>
+          <input type="text" id="searchInput" placeholder="Tìm giáo trình, ấm siêu tốc, tai nghe..." oninput="onSearchInput(this.value)">
+        </div>
+      </div>
+
+      <!-- Lưới sản phẩm -->
+      <div id="productsGrid" class="products-grid">
+        <!-- Rendered dynamically -->
+      </div>
+    </section>
+
+    <!-- ================= VIEW 2: QUẢN LÝ ĐƠN HÀNG & 5-DAY SLA ================= -->
+    <section id="view-orders" class="view-section">
+      
+      <!-- Giới thiệu tiến trình 3 bước -->
+      <div class="sla-flow-card">
+        <div class="sla-flow-header">
+          <h2>🛡️ Cơ Chế Thanh Toán Ký Quỹ (Escrow) & Tự Động Xác Nhận Sau 5 Ngày</h2>
+          <p>Bảo vệ 100% quyền lợi sinh viên: Người mua không sợ bị lừa tiền cọc, Người bán chắc chắn nhận được tiền sau 5 ngày.</p>
+        </div>
+
+        <div class="steps-pipeline">
+          <div class="step-node completed">
+            <div class="step-icon">1</div>
+            <div class="step-text">
+              <div class="title">Đã thanh toán (Ví Escrow)</div>
+              <div class="desc">Tiền bị tạm giữ an toàn trong két</div>
+            </div>
+          </div>
+
+          <div class="step-node active">
+            <div class="step-icon">2</div>
+            <div class="step-text">
+              <div class="title">Đang giao & Đồng hồ 5 ngày</div>
+              <div class="desc">Thời gian bảo vệ để người mua kiểm tra hàng</div>
+            </div>
+          </div>
+
+          <div class="step-node">
+            <div class="step-icon">3</div>
+            <div class="step-text">
+              <div class="title">Hoàn tất & Giải ngân</div>
+              <div class="desc">Chuyển tiền tự động vào ví người bán</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Danh sách đơn hàng -->
+      <div id="ordersListContainer">
+        <!-- Rendered dynamically -->
+      </div>
+    </section>
+
+    <!-- ================= VIEW 3: VÍ TAKETWO & LỊCH SỬ GIAO DỊCH ================= -->
+    <section id="view-wallet" class="view-section">
+      <div class="sla-flow-card" style="margin-bottom: 20px;">
+        <div class="sla-flow-header" style="display:flex; justify-content:space-between; align-items:center;">
+          <div>
+            <h2>💳 Sổ Quỹ Thu Chi & Lịch Sử Giao Dịch (Ví TakeTwo)</h2>
+            <p>Toàn bộ dòng tiền nạp, mua gói đẩy bài, thanh toán đơn hàng đều được ghi nhận minh bạch tức thì.</p>
+          </div>
+          <div style="display:flex; gap:10px;">
+            <button class="btn-quick-topup" style="background:#2563EB; color:white;" onclick="quickTopup(100000)">+100.000đ</button>
+            <button class="btn-quick-topup" style="background:#2563EB; color:white;" onclick="quickTopup(500000)">+500.000đ</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Bảng lịch sử giao dịch -->
+      <div class="tx-table-container">
+        <table class="tx-table">
+          <thead>
+            <tr>
+              <th>Mã GD</th>
+              <th>Loại giao dịch</th>
+              <th>Mô tả chi tiết</th>
+              <th>Thời gian</th>
+              <th>Số tiền (VNĐ)</th>
+              <th>Số dư sau GD</th>
+              <th>Trạng thái</th>
+            </tr>
+          </thead>
+          <tbody id="txTableBody">
+            <!-- Rendered dynamically -->
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- ================= VIEW 4: MÔ HÌNH KINH DOANH & GÓI ĐẨY BÀI ================= -->
+    <section id="view-business" class="view-section">
+      <div class="sla-flow-card">
+        <div class="sla-flow-header">
+          <h2>💡 Mô Hình Kinh Doanh Dựa Trên Tâm Lý Người Tiêu Dùng (Behavioral Economics)</h2>
+          <p>Giải quyết triệt để bài toán: Mỗi lần đăng/đẩy bài lẻ tốn 15.000đ rất phiền phức và tốn phí chuyển khoản lắt nhắt.</p>
+        </div>
+
+        <!-- 3 Gói VIP Boost (Decoy Effect) -->
+        <div class="pricing-grid">
+          
+          <!-- Gói 1: Gói Lẻ (Giá neo) -->
+          <div class="pricing-card">
+            <h3>Gói Lẻ (Cơ Bản)</h3>
+            <div class="pricing-tag">Mức giá neo so sánh</div>
+            <div class="price-row">
+              <span class="price-amount">15.000đ</span>
+              <span class="price-unit">/ 1 lượt</span>
+            </div>
+            <ul class="pricing-features">
+              <li>✅ 1 lượt đẩy bài viết lên vị trí Top 1</li>
+              <li>✅ Hiển thị ưu tiên trong 3 ngày</li>
+              <li>❌ Không có huy hiệu nổi bật</li>
+              <li>❌ Không tiết kiệm chi phí</li>
+            </ul>
+            <button class="btn-buy-package outline" onclick="buyPackage('bump_single')">
+              Mua Gói Lẻ (15.000đ)
+            </button>
+          </div>
+
+          <!-- Gói 2: Sinh viên tiết kiệm (Khuyên dùng - Chim mồi) -->
+          <div class="pricing-card featured">
+            <div class="pricing-badge-popular">⭐ Phổ biến nhất - Tiết kiệm 35%</div>
+            <h3>Gói Sinh Viên Tiết Kiệm</h3>
+            <div class="pricing-tag">Chỉ 9.800đ / lượt đẩy</div>
+            <div class="price-row">
+              <span class="price-amount">49.000đ</span>
+              <span class="price-unit">/ 5 lượt</span>
+            </div>
+            <ul class="pricing-features">
+              <li>✅ <strong>5 lượt đăng & đẩy bài</strong> linh hoạt</li>
+              <li>✅ <strong>Tiết kiệm ngay 26.000đ</strong> so với mua lẻ</li>
+              <li>✅ Dùng dần trong cả kỳ học (30 ngày)</li>
+              <li>✅ Trừ tiền trực tiếp vào Ví tức thì</li>
+            </ul>
+            <button class="btn-buy-package primary" onclick="buyPackage('bump_saver')">
+              ⚡ Mua Gói 49.000đ (5 Lượt)
+            </button>
+          </div>
+
+          <!-- Gói 3: Xả đồ ra trường (VIP) -->
+          <div class="pricing-card vip">
+            <div class="pricing-badge-vip">👑 Siêu hời - Pass nhanh x3</div>
+            <h3>Gói Xả Đồ Ra Trường (VIP)</h3>
+            <div class="pricing-tag">Chỉ 7.900đ / lượt + Huy hiệu VIP</div>
+            <div class="price-row">
+              <span class="price-amount">79.000đ</span>
+              <span class="price-unit">/ 10 lượt</span>
+            </div>
+            <ul class="pricing-features">
+              <li>✅ <strong>10 lượt đẩy Top 1</strong> không giới hạn</li>
+              <li>✅ Tặng ngay <strong>Huy hiệu "🔥 Đẩy Top"</strong> rực rỡ</li>
+              <li>✅ Viền thẻ màu cam nổi bật gấp 3 lần</li>
+              <li>✅ Phù hợp dọn phòng KTX, pass sỉ cả phòng</li>
+            </ul>
+            <button class="btn-buy-package vip" onclick="buyPackage('bump_vip')">
+              🔥 Mua Gói VIP 79.000đ (10 Lượt)
+            </button>
+          </div>
+
+        </div>
+
+        <!-- Phân tích tâm lý học dành cho bài thuyết trình -->
+        <div style="background:#F8FAFC; border:1px solid var(--border); border-radius:var(--radius-md); padding:18px; margin-top:20px;">
+          <h4 style="font-size:14px; font-weight:800; color:var(--text-title); margin-bottom:8px;">🧠 4 Yếu Tố Tâm Lý Học Ứng Dụng Trong Dự Án (Trình bày với Giảng viên):</h4>
+          <ol style="font-size:13px; color:var(--text-body); line-height:1.7; padding-left:20px;">
+            <li><strong>Hiệu ứng chim mồi (Decoy Effect) & Mức giá neo:</strong> Đặt giá gói lẻ 15.000đ/lượt để biến gói 49.000đ/5 lượt thành lựa chọn "quá hời" (tiết kiệm 35%), kích thích người dùng chọn gói lớn.</li>
+            <li><strong>Chi phí chìm (Sunk Cost Fallacy):</strong> Khi sinh viên đã mua gói 5 lượt hoặc 10 lượt, họ sẽ có xu hướng tích cực dọn phòng trọ và đăng thêm nhiều món đồ cũ khác để dùng hết lượt đã mua.</li>
+            <li><strong>Két tiền tâm lý (Mental Accounting):</strong> Nạp sẵn tiền vào Ví TakeTwo giúp tách rời nỗi đau mất tiền khi mua hàng (Pain of Paying), giúp quyết định bấm mua đồ diễn ra nhanh hơn gấp 4 lần.</li>
+            <li><strong>Giảm thiểu ma sát thanh toán (Frictionless In-App Wallet):</strong> Thay vì mỗi lần đẩy bài sinh viên phải mở app ngân hàng quét QR 15k, chỉ cần 1 cú click là bài viết bay thẳng lên Top 1.</li>
+          </ol>
+        </div>
+
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ================= MODAL 1: CHECKOUT & SHIPPING FLOW ================= -->
+  <div id="modalCheckout" class="modal-backdrop">
+    <div class="modal-box">
+      <div class="modal-header">
+        <h3>🛒 Thanh Toán & Vận Chuyển Qua Ví Escrow</h3>
+        <button class="btn-close-modal" onclick="closeModal('modalCheckout')">&times;</button>
+      </div>
+
+      <div class="modal-body">
+        <!-- Thông tin tóm tắt sản phẩm -->
+        <div style="display:flex; gap:12px; background:#F8FAFC; padding:12px; border-radius:var(--radius-sm); border:1px solid var(--border); margin-bottom:16px;">
+          <img id="checkoutProductImg" src="" style="width:60px; height:60px; object-fit:cover; border-radius:4px;">
+          <div style="flex:1;">
+            <div id="checkoutProductTitle" style="font-size:13px; font-weight:700; color:var(--text-title); line-height:1.3; margin-bottom:4px;"></div>
+            <div style="font-size:14px; font-weight:800; color:#DC2626;" id="checkoutProductPrice"></div>
+          </div>
+        </div>
+
+        <!-- Thông tin người nhận -->
+        <div class="form-group">
+          <label>Họ và tên người nhận:</label>
+          <input type="text" id="checkoutName" class="form-control" value="Vũ Hán Tuấn">
+        </div>
+
+        <div class="form-group">
+          <label>Số điện thoại liên hệ:</label>
+          <input type="text" id="checkoutPhone" class="form-control" value="0987.654.321">
+        </div>
+
+        <div class="form-group">
+          <label>Địa chỉ nhận đồ (KTX / Phòng trọ / Giảng đường):</label>
+          <input type="text" id="checkoutAddress" class="form-control" value="Phòng 302 KTX Dom A, ĐH FPT Hòa Lạc">
+        </div>
+
+        <!-- Chọn phương thức giao hàng (Ship) -->
+        <div class="form-group">
+          <label style="margin-bottom:8px;">Chọn phương thức giao hàng (Ship):</label>
+          <div class="shipping-radio-group">
+            
+            <label class="shipping-option selected" onclick="selectShipping('CAMPUS', 0, this)">
+              <div>
+                <input type="radio" name="deliveryType" value="CAMPUS" checked>
+                <strong>Gặp trực tiếp tại trường / KTX</strong>
+                <div style="font-size:11.5px; color:var(--text-muted); margin-left:22px;">Hẹn gặp sảnh tòa nhà, canteen, thư viện</div>
+              </div>
+              <span class="shipping-cost-tag">Miễn phí (0đ)</span>
+            </label>
+
+            <label class="shipping-option" onclick="selectShipping('ROOM', 15000, this)">
+              <div>
+                <input type="radio" name="deliveryType" value="ROOM">
+                <strong>Ship nội khu / Giao tận phòng trọ</strong>
+                <div style="font-size:11.5px; color:var(--text-muted); margin-left:22px;">Người bán hoặc shipper sinh viên mang lên tận phòng</div>
+              </div>
+              <span class="shipping-cost-tag">+15.000đ</span>
+            </label>
+
+            <label class="shipping-option" onclick="selectShipping('EXPRESS', 25000, this)">
+              <div>
+                <input type="radio" name="deliveryType" value="EXPRESS">
+                <strong>Giao hàng nhanh nội thành</strong>
+                <div style="font-size:11.5px; color:var(--text-muted); margin-left:22px;">Gửi xe bus / Ahamove giao trong 2-4 giờ</div>
+              </div>
+              <span class="shipping-cost-tag">+25.000đ</span>
+            </label>
+
+          </div>
+        </div>
+
+        <!-- Phương thức thanh toán & Bảng tính tiền -->
+        <div style="background:#EFF6FF; border:1px solid #BFDBFE; border-radius:var(--radius-sm); padding:12px; margin-top:16px;">
+          <div style="font-size:12px; font-weight:700; color:#1E40AF; margin-bottom:8px;">
+            🛡️ Thanh toán bảo vệ qua Ví TakeTwo (Két Escrow tạm giữ)
+          </div>
+          
+          <div style="display:flex; justify-content:space-between; font-size:12.5px; margin-bottom:4px;">
+            <span>Tiền sản phẩm:</span>
+            <strong id="summaryProductPrice">0 đ</strong>
+          </div>
+
+          <div style="display:flex; justify-content:space-between; font-size:12.5px; margin-bottom:8px;">
+            <span>Phí vận chuyển:</span>
+            <strong id="summaryShippingFee">0 đ</strong>
+          </div>
+
+          <div style="border-top:1px dashed #93C5FD; padding-top:6px; display:flex; justify-content:space-between; font-size:14px; font-weight:800; color:#1E3A8A;">
+            <span>TỔNG THANH TOÁN:</span>
+            <span id="summaryTotalAmount" style="color:#DC2626; font-size:16px;">0 đ</span>
+          </div>
+
+          <div style="font-size:11px; color:#6B7280; margin-top:6px;">
+            * Tiền sẽ được tạm giữ an toàn trong két TakeTwo. Người bán chỉ nhận được tiền sau khi bạn xác nhận hài lòng hoặc sau 5 ngày.
+          </div>
+        </div>
+
+      </div>
+
+      <div class="modal-footer">
+        <button class="btn-buy-package outline" style="width:auto;" onclick="closeModal('modalCheckout')">Hủy bỏ</button>
+        <button id="btnSubmitCheckout" class="btn-buy-package primary" style="width:auto; min-width:180px;" onclick="confirmCheckout()">
+          ✅ Xác Nhận Thanh Toán
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= MODAL 2: GÓI ĐẨY BÀI VIP ================= -->
+  <div id="modalBoost" class="modal-backdrop">
+    <div class="modal-box" style="max-width:680px;">
+      <div class="modal-header">
+        <h3>🚀 Mua Gói Đăng & Đẩy Bài VIP (Trừ Trực Tiếp Từ Ví)</h3>
+        <button class="btn-close-modal" onclick="closeModal('modalBoost')">&times;</button>
+      </div>
+
+      <div class="modal-body">
+        <p style="font-size:13px; color:var(--text-muted); margin-bottom:16px;">
+          Chọn gói phù hợp với nhu cầu. Số tiền sẽ được trừ trực tiếp từ số dư ví TakeTwo (Hiện có: <strong id="modalWalletBal">0đ</strong>).
+        </p>
+
+        <div class="pricing-grid" style="margin:0; gap:14px;">
+          
+          <div class="pricing-card" style="padding:16px;">
+            <h4 style="font-size:15px; font-weight:800;">Gói Lẻ (Cơ Bản)</h4>
+            <div style="font-size:18px; font-weight:900; color:var(--text-title); margin:6px 0;">15.000đ</div>
+            <div style="font-size:12px; color:var(--text-muted); margin-bottom:12px;">1 lượt đẩy bài Top 1</div>
+            <button class="btn-buy-package outline" onclick="buyPackage('bump_single')">Mua 15k</button>
+          </div>
+
+          <div class="pricing-card featured" style="padding:16px; transform:none;">
+            <div class="pricing-badge-popular" style="font-size:10px; top:-10px;">Phổ biến nhất</div>
+            <h4 style="font-size:15px; font-weight:800; color:#2563EB;">Gói SV Tiết Kiệm</h4>
+            <div style="font-size:18px; font-weight:900; color:#2563EB; margin:6px 0;">49.000đ</div>
+            <div style="font-size:12px; color:#059669; font-weight:700; margin-bottom:12px;">5 lượt (Tiết kiệm 35%)</div>
+            <button class="btn-buy-package primary" onclick="buyPackage('bump_saver')">Mua 49k</button>
+          </div>
+
+          <div class="pricing-card vip" style="padding:16px;">
+            <div class="pricing-badge-vip" style="font-size:10px; top:-10px;">Siêu hời</div>
+            <h4 style="font-size:15px; font-weight:800; color:#D97706;">Xả Đồ KTX (VIP)</h4>
+            <div style="font-size:18px; font-weight:900; color:#D97706; margin:6px 0;">79.000đ</div>
+            <div style="font-size:12px; color:#D97706; font-weight:700; margin-bottom:12px;">10 lượt + 🔥 Đẩy Top</div>
+            <button class="btn-buy-package vip" onclick="buyPackage('bump_vip')">Mua 79k</button>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= MODAL 3: ĐĂNG TIN PASS ĐỒ ================= -->
+  <div id="modalPost" class="modal-backdrop">
+    <div class="modal-box">
+      <div class="modal-header">
+        <h3>📝 Đăng Tin Pass Đồ Cũ Sinh Viên</h3>
+        <button class="btn-close-modal" onclick="closeModal('modalPost')">&times;</button>
+      </div>
+
+      <div class="modal-body">
+        <div class="form-group">
+          <label>Tiêu đề món đồ:</label>
+          <input type="text" id="postTitle" class="form-control" placeholder="Ví dụ: Giáo trình C++, Ấm đun siêu tốc 1.8L...">
+        </div>
+
+        <div class="form-group">
+          <label>Danh mục:</label>
+          <select id="postCategory" class="form-control">
+            <option value="books">📚 Giáo trình & Học tập</option>
+            <option value="living">🛏️ Đồ phòng trọ & KTX</option>
+            <option value="electronics">💻 Điện tử & Phụ kiện</option>
+            <option value="fashion">👕 Đồng phục & Thời trang SV</option>
+          </select>
+        </div>
+
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px;">
+          <div class="form-group">
+            <label>Giá pass lại (VNĐ):</label>
+            <input type="number" id="postPrice" class="form-control" placeholder="45000">
+          </div>
+          <div class="form-group">
+            <label>Giá mua gốc (nếu có):</label>
+            <input type="number" id="postOriginalPrice" class="form-control" placeholder="120000">
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>Mô tả tình trạng & khuyết điểm:</label>
+          <textarea id="postDefect" class="form-control" rows="2" placeholder="Ví dụ: Dùng được 1 kỳ, sạch sẽ, không xước..."></textarea>
+        </div>
+
+        <div class="form-group">
+          <label>Địa điểm hẹn giao:</label>
+          <input type="text" id="postLocation" class="form-control" value="Sảnh KTX Dom A ĐH FPT Hòa Lạc">
+        </div>
+
+        <div class="form-group" style="background:#FFFBEB; border:1px solid #FCD34D; padding:10px 12px; border-radius:var(--radius-sm);">
+          <label style="display:flex; align-items:center; gap:8px; cursor:pointer; margin-bottom:0;">
+            <input type="checkbox" id="postAutoBump" checked>
+            <span><strong>🚀 Đẩy bài lên Top 1 ngay khi đăng</strong> (Ưu tiên trừ 1 lượt đẩy VIP hoặc trừ 15k từ ví)</span>
+          </label>
+        </div>
+
+      </div>
+
+      <div class="modal-footer">
+        <button class="btn-buy-package outline" style="width:auto;" onclick="closeModal('modalPost')">Hủy</button>
+        <button class="btn-buy-package primary" style="width:auto;" onclick="submitPostProduct()">Đăng Tin Ngay</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Container -->
+  <div id="toastContainer" class="toast-container"></div>
+
+  <!-- App JS -->
+  <script src="js/app.js"></script>
+</body>
+</html>

@@ -1,0 +1,952 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TakeTwo — Sàn Pass Đồ Cũ Sinh Viên & Ví Điện Tử Escrow</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🔄</text></svg>">
+</head>
+<body>
+
+  <div class="app-shell">
+    
+    <!-- ================= LEFT SIDEBAR (PANCAKE FINTAB NAVIGATION) ================= -->
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <div class="brand-wrapper" onclick="switchNav('overview')">
+          <div class="brand-icon-box">T2</div>
+          <div class="brand-meta">
+            <h2>TakeTwo <span class="brand-tag">PAY</span></h2>
+            <p>Secondhand Sinh Viên Hà Nội</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Workspace Selector -->
+      <div class="sidebar-workspace-select" onclick="switchNav('marketplace')">
+        <div style="display: flex; align-items: center; gap: 6px;">
+          <span>📍</span>
+          <span id="sidebarCampusLabel" style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 170px;">Cụm Hòa Lạc (ĐH FPT)</span>
+        </div>
+        <span style="font-size: 10px; color: var(--text-light);">▾</span>
+      </div>
+
+      <!-- Navigation Menu -->
+      <nav class="sidebar-nav">
+        <div class="nav-section-label">Bảng Điều Khiển</div>
+        
+        <div id="nav-overview" class="sidebar-nav-item active" onclick="switchNav('overview')">
+          <div class="nav-left">
+            <svg fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M3 13.125C3 12.504 3.504 12 4.125 12h2.25c.621 0 1.125.504 1.125 1.125v6.75C7.5 20.496 6.996 21 6.375 21h-2.25A1.125 1.125 0 013 19.875v-6.75zM9.75 8.625c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125v11.25c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V8.625zM16.5 4.125c0-.621.504-1.125 1.125-1.125h2.25C20.496 3 21 3.504 21 4.125v15.75c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V4.125z" />
+            </svg>
+            <span class="nav-item-text">Tổng quan (Overview)</span>
+          </div>
+        </div>
+
+        <div id="nav-marketplace" class="sidebar-nav-item" onclick="switchNav('marketplace')">
+          <div class="nav-left">
+            <svg fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 10.5V6a3.75 3.75 0 10-7.5 0v4.5m11.356-1.993l1.263 12c.07.665-.45 1.243-1.119 1.243H4.25a1.125 1.125 0 01-1.12-1.243l1.264-12A1.125 1.125 0 015.513 7.5h12.974c.576 0 1.059.435 1.119 1.007zM8.625 10.5a.375.375 0 11-.75 0 .375.375 0 01.75 0zm7.5 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z" />
+            </svg>
+            <span class="nav-item-text">Sản phẩm & Đồ cũ</span>
+          </div>
+          <span id="navProductCount" class="nav-badge">8 SP</span>
+        </div>
+
+        <div id="nav-orders" class="sidebar-nav-item" onclick="switchNav('orders')">
+          <div class="nav-left">
+            <svg fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 18.75a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m3 0h6m-9 0H3.375a1.125 1.125 0 01-1.125-1.125V14.25m17.25 4.5a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m3 0h1.125c.621 0 1.129-.504 1.09-1.124a17.902 17.902 0 00-3.213-9.193 2.056 2.056 0 00-1.58-.86H14.25M16.5 18.75h-2.25m0-11.177v-.948c0-.621-.504-1.125-1.125-1.125H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z" />
+            </svg>
+            <span class="nav-item-text">Đơn hàng & Ship</span>
+          </div>
+          <span id="navOrderCount" class="nav-badge nav-badge-warning">1 SLA</span>
+        </div>
+
+        <div class="nav-section-label">Tài Chính & Ví TakeTwo</div>
+
+        <!-- TAKETWO THU CHI (TRANSACTIONS / SỔ QUỸ) -->
+        <div id="nav-transactions" class="sidebar-nav-item" onclick="switchNav('transactions')">
+          <div class="nav-left">
+            <svg fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v12m-3-2.818l.879.659c1.171.879 3.07.879 4.242 0 1.172-.879 1.172-2.303 0-3.182C13.536 12.219 12.768 12 12 12c-.725 0-1.45-.22-2.003-.659-1.106-.879-1.106-2.303 0-3.182s2.9-.879 4.006 0l.415.33M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+            <span class="nav-item-text">Thu chi & Sổ quỹ</span>
+          </div>
+          <span class="nav-badge nav-badge-primary">Sổ Quỹ</span>
+        </div>
+
+        <div id="nav-packages" class="sidebar-nav-item" onclick="switchNav('packages')">
+          <div class="nav-left">
+            <svg fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 13.5l10.5-11.25L12 10.5h8.25L9.75 21.75 12 13.5H3.75z" />
+            </svg>
+            <span class="nav-item-text">Gói đẩy tin 1-Click</span>
+          </div>
+          <span class="nav-badge nav-badge-warning">HOT</span>
+        </div>
+
+        <div class="nav-section-label">Quản Trị & Pháp Lý</div>
+
+        <div id="nav-disputes" class="sidebar-nav-item" onclick="switchNav('disputes')">
+          <div class="nav-left">
+            <svg fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m0-10.036A11.959 11.959 0 013.598 6 11.99 11.99 0 003 9.75c0 5.592 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.57-.598-3.75h-.152c-3.196 0-6.1-1.249-8.25-3.286zm0 13.036h.008v.008H12v-.008z" />
+            </svg>
+            <span class="nav-item-text">Trọng tài tranh chấp</span>
+          </div>
+          <span id="navDisputeCount" class="nav-badge">0</span>
+        </div>
+      </nav>
+
+      <!-- Sidebar Footer (Account Switcher) -->
+      <div class="sidebar-footer">
+        <div class="account-selector-card">
+          <img id="sidebarUserAvatar" src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=150&q=80" class="account-avatar">
+          <div class="account-info">
+            <div id="sidebarUserName" class="account-name">Vũ Hán Tuấn</div>
+            <div id="sidebarUserRole" class="account-role-tag">
+              <span class="fintab-badge fintab-badge-blue" style="padding: 1px 6px; font-size: 9.5px;">BUYER</span>
+              <span id="sidebarStudentCode">HE194875</span>
+            </div>
+          </div>
+        </div>
+        <select id="userSwitcher" class="account-switch-dropdown" onchange="onUserSwitch(this.value)">
+          <!-- Rendered via JS -->
+        </select>
+      </div>
+    </aside>
+
+    <!-- ================= MAIN VIEWPORT ================= -->
+    <div class="main-wrapper">
+      
+      <!-- Sticky Topbar -->
+      <header class="top-bar">
+        <div class="top-bar-left">
+          <div class="breadcrumb-trail">
+            <span>TakeTwo</span>
+            <span>/</span>
+            <span id="breadcrumbCurrent" class="current-page">Tổng quan hoạt động</span>
+          </div>
+
+          <div class="global-search-box">
+            <span>🔍</span>
+            <input type="text" id="globalSearchInput" placeholder="Tìm theo tên đồ cũ, mã chứng từ PT/PC..." onkeypress="if(event.key==='Enter') executeGlobalSearch()">
+            <span class="kbd-shortcut">Ctrl K</span>
+          </div>
+        </div>
+
+        <div class="top-bar-right">
+          <!-- Quick Wallet Pill Widget -->
+          <div class="wallet-quick-pill" onclick="switchNav('transactions')" title="Bấm xem Sổ Quỹ Thu Chi & Két Escrow">
+            <span style="font-size: 14px;">💳</span>
+            <div>
+              <span style="font-size: 10px; color: var(--text-muted); display: block; line-height: 1;">Khả Dụng:</span>
+              <span id="topbarWalletAvailable" class="quick-val">250.000 đ</span>
+            </div>
+            <div style="border-left: 1px solid #CBD5E1; padding-left: 8px;">
+              <span style="font-size: 10px; color: var(--text-muted); display: block; line-height: 1;">Escrow 5 Ngày:</span>
+              <span id="topbarWalletEscrow" class="quick-escrow-val">55.000 đ</span>
+            </div>
+            <div style="border-left: 1px solid #CBD5E1; padding-left: 8px;">
+              <span style="font-size: 10px; color: var(--text-muted); display: block; line-height: 1;">Đẩy VIP:</span>
+              <span id="topbarBoostCredits" style="font-weight: 800; font-size: 12px; color: #D97706;">2 lượt</span>
+            </div>
+            <button class="btn-topup-mini" onclick="event.stopPropagation(); quickTopup(100000)" title="Nạp nhanh +100.000đ demo">+ Nạp 100k</button>
+          </div>
+
+          <!-- Post New Listing CTA Button -->
+          <button class="btn-post-primary" onclick="openCreateListingModal()">
+            <svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+            </svg>
+            Đăng Bán Nhanh
+          </button>
+        </div>
+      </header>
+
+      <!-- Scrollable Main Content Area -->
+      <main class="content-area">
+
+        <!-- ================= 1. VIEW: TỔNG QUAN (FINTAB OVERVIEW) ================= -->
+        <section id="view-overview">
+          <div class="fintab-page-header">
+            <div class="page-title-group">
+              <h1>📊 Tổng Quan Tài Chính & Giao Dịch C2C</h1>
+              <p>Hệ thống tự động đồng bộ dòng tiền mua bán, két Escrow 5 ngày và sổ cái chứng từ minh bạch.</p>
+            </div>
+            <div class="page-actions-group">
+              <select id="overviewCampusFilter" class="filter-select" onchange="onOverviewFilterChange()">
+                <option value="all">Tất cả Cụm trường Hà Nội</option>
+                <option value="Hòa Lạc" selected>📍 Cụm Hòa Lạc (ĐH FPT / ĐHQG)</option>
+                <option value="Cầu Giấy - Xuân Thủy">📍 Cụm Cầu Giấy - Xuân Thủy</option>
+                <option value="Bách - Kinh - Xây">📍 Cụm Bách - Kinh - Xây</option>
+                <option value="Đống Đa - Chùa Láng">📍 Cụm Đống Đa - Chùa Láng</option>
+                <option value="Hà Đông - Thanh Xuân">📍 Cụm Hà Đông - Thanh Xuân</option>
+              </select>
+              <button class="btn-fintab btn-fintab-outline" onclick="initApp()">🔄 Làm mới</button>
+            </div>
+          </div>
+
+          <!-- 4 Core Financial KPI Cards -->
+          <div class="kpi-grid">
+            <div class="kpi-card">
+              <div class="kpi-top-row">
+                <span class="kpi-label">Số Dư Khả Dụng Trong Ví</span>
+                <div class="kpi-icon-badge kpi-icon-green">💳</div>
+              </div>
+              <div id="kpiOverviewWalletAvail" class="kpi-value">250.000 đ</div>
+              <div class="kpi-footer" style="display: flex; align-items: center; gap: 6px;">
+                <button class="btn-topup-mini" onclick="quickTopup(100000)" title="Nạp nhanh 100k demo">+100k</button>
+                <button class="btn-topup-mini" onclick="quickTopup(500000)" title="Nạp nhanh 500k demo">+500k</button>
+                <a href="javascript:void(0)" onclick="openTopupModal()" style="color: var(--primary); font-weight: 600; text-decoration: none; font-size: 11px; margin-left: auto;">VietQR ↗</a>
+              </div>
+            </div>
+
+            <div class="kpi-card">
+              <div class="kpi-top-row">
+                <span class="kpi-label">Quỹ Tạm Giữ Escrow 5 Ngày</span>
+                <div class="kpi-icon-badge kpi-icon-amber">🛡️</div>
+              </div>
+              <div id="kpiOverviewEscrow" class="kpi-value">55.000 đ</div>
+              <div class="kpi-footer">
+                <span style="color: #D97706; font-weight: 600;">1 đơn</span>
+                <span>đang được bảo vệ chống gian lận</span>
+              </div>
+            </div>
+
+            <div class="kpi-card">
+              <div class="kpi-top-row">
+                <span class="kpi-label">Lượt Đẩy Bài VIP Hiện Có</span>
+                <div class="kpi-icon-badge kpi-icon-blue">🚀</div>
+              </div>
+              <div id="kpiOverviewBoostCredits" class="kpi-value" style="color: #D97706;">2 lượt</div>
+              <div class="kpi-footer">
+                <a href="javascript:void(0)" onclick="switchNav('packages')" style="color: #D97706; font-weight: 700; text-decoration: none; font-size: 11.5px;">⚡ Mua thêm gói đẩy tin ↗</a>
+              </div>
+            </div>
+
+            <div class="kpi-card">
+              <div class="kpi-top-row">
+                <span class="kpi-label">Tổng Giá Trị Giao Dịch (GMV)</span>
+                <div class="kpi-icon-badge kpi-icon-purple">💰</div>
+              </div>
+              <div id="kpiOverviewGMV" class="kpi-value">1.280.000 đ</div>
+              <div class="kpi-footer">
+                <span class="kpi-trend-positive">↑ +14.2%</span>
+                <span id="kpiOverviewOrdersCount">1 đơn hoàn tất</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Cash Flow Breakdown Analytics Bar -->
+          <div class="analytics-card">
+            <div class="analytics-header">
+              <div>
+                <div class="analytics-title">Phân Bổ Dòng Tiền & Két Bảo Đảm Thanh Khoản (Cash Flow Pool)</div>
+                <p style="font-size: 12px; color: var(--text-muted); margin-top: 2px;">Cơ chế tách bạch giữa Quỹ Chi Tiêu Khả Dụng, Quỹ Tạm Giữ Escrow Đơn Hàng và Sổ Quỹ Dự Phòng $30.250.000\text{đ}$</p>
+              </div>
+              <span class="fintab-badge fintab-badge-success"><span class="dot"></span> 100% Khả Năng Thanh Toán</span>
+            </div>
+
+            <div class="cashflow-progress-bar">
+              <div class="progress-segment seg-avail" style="width: 25%;" title="Số Dư Khả Dụng Người Dùng (25%)"></div>
+              <div class="progress-segment seg-escrow" style="width: 15%;" title="Số Dư Két Escrow Đang Tạm Khóa (15%)"></div>
+              <div class="progress-segment seg-reserve" style="width: 60%;" title="Quỹ Dự Phòng Sổ Cái TakeTwo (60%)"></div>
+            </div>
+
+            <div class="cashflow-legend">
+              <div class="legend-item">
+                <span class="legend-dot seg-avail"></span>
+                <span>Số Dư Khả Dụng: <strong id="barAvailVal">250.000 đ</strong></span>
+              </div>
+              <div class="legend-item">
+                <span class="legend-dot seg-escrow"></span>
+                <span>Két Tạm Giữ Escrow: <strong id="barEscrowVal">55.000 đ</strong></span>
+              </div>
+              <div class="legend-item">
+                <span class="legend-dot seg-reserve"></span>
+                <span>Sổ Quỹ Đối Soát Dự Phòng: <strong>30.250.000 đ</strong> (Bình phụ trách)</span>
+              </div>
+              <div class="legend-item">
+                <span>🌱 <strong>Chỉ số Sống Xanh:</strong> <span id="barEcoVal">18.5 kg CO2</span> giảm phát thải</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Two Column Grid: Recent Ledger & Live Orders Feed -->
+          <div style="display: grid; grid-template-columns: 1.5fr 1fr; gap: 20px;">
+            <div class="table-card">
+              <div style="padding: 14px 18px; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center;">
+                <div style="font-size: 13.5px; font-weight: 700; color: var(--text-title);">📜 Sổ Cái Chứng Từ Gần Nhất (TakeTwo Ledger)</div>
+                <button class="btn-fintab btn-fintab-outline" style="padding: 4px 10px; font-size: 11.5px;" onclick="switchNav('transactions')">Mở Sổ Thu Chi</button>
+              </div>
+              <div class="table-responsive">
+                <table class="fintab-table">
+                  <thead>
+                    <tr>
+                      <th>Mã Chứng Từ</th>
+                      <th>Nghiệp Vụ</th>
+                      <th>Số Tiền</th>
+                      <th>Trạng Thái</th>
+                    </tr>
+                  </thead>
+                  <tbody id="overviewLedgerTbody">
+                    <!-- Injected via JS -->
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            <div class="table-card">
+              <div style="padding: 14px 18px; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center;">
+                <div style="font-size: 13.5px; font-weight: 700; color: var(--text-title);">⏳ Tiến Trình Đơn & Bảo Vệ 5 Ngày</div>
+                <button class="btn-fintab btn-fintab-outline" style="padding: 4px 10px; font-size: 11.5px;" onclick="switchNav('orders')">Quản Lý</button>
+              </div>
+              <div id="overviewSlaBox" style="padding: 18px;">
+                <!-- Injected via JS -->
+              </div>
+            </div>
+          </div>
+        </section>
+
+
+        <!-- ================= 2. VIEW: SẢN PHẨM & ĐỒ CŨ (50 SẢN PHẨM MẪU) ================= -->
+        <section id="view-marketplace" style="display: none;">
+          <div class="fintab-page-header">
+            <div class="page-title-group">
+              <h1>🛒 Sàn Giao Dịch Đồ Cũ Sinh Viên Hà Nội</h1>
+              <p>8 sản phẩm sinh viên chân thực được phân bổ đều qua 4 danh mục và các cụm trường Đại học tại Hà Nội.</p>
+            </div>
+            <div class="page-actions-group">
+              <button class="btn-fintab btn-fintab-primary" onclick="openCreateListingModal()">+ Đăng Tin Mới</button>
+            </div>
+          </div>
+
+          <!-- Filter Toolbar (Pancake POS Style) -->
+          <div class="filter-toolbar">
+            <div class="filter-group-left">
+              <div class="btn-pill-group">
+                <button class="btn-pill-item active" onclick="setCategoryPill('all', this)">Tất cả</button>
+                <button class="btn-pill-item" onclick="setCategoryPill('books', this)">📚 Giáo trình</button>
+                <button class="btn-pill-item" onclick="setCategoryPill('living', this)">🛏️ Đồ trọ KTX</button>
+                <button class="btn-pill-item" onclick="setCategoryPill('electronics', this)">💻 Điện tử</button>
+                <button class="btn-pill-item" onclick="setCategoryPill('fashion', this)">👕 Thời trang</button>
+              </div>
+
+              <select id="marketCampusSelect" class="filter-select" onchange="onFilterChange()">
+                <option value="all">📍 Toàn Hà Nội</option>
+                <option value="Hòa Lạc" selected>📍 Cụm Hòa Lạc (ĐH FPT / ĐHQG)</option>
+                <option value="Cầu Giấy - Xuân Thủy">📍 Cụm Cầu Giấy - Xuân Thủy</option>
+                <option value="Bách - Kinh - Xây">📍 Cụm Bách - Kinh - Xây</option>
+                <option value="Đống Đa - Chùa Láng">📍 Cụm Đống Đa - Chùa Láng</option>
+                <option value="Hà Đông - Thanh Xuân">📍 Cụm Hà Đông - Thanh Xuân</option>
+              </select>
+
+              <select id="conditionFilter" class="filter-select" onchange="onFilterChange()">
+                <option value="all">Độ mới: Tất cả</option>
+                <option value="Như mới 99%">Như mới 99%</option>
+                <option value="Tốt 90%">Tốt 90%</option>
+                <option value="Khá 80%">Khá 80%</option>
+              </select>
+            </div>
+
+            <div style="font-size: 12.5px; color: var(--text-muted); font-weight: 500;">
+              Hiển thị <span id="productResultCount" style="color: var(--primary); font-weight: 700;">8 món đồ</span>
+            </div>
+          </div>
+
+          <!-- Product Card Grid -->
+          <div id="productGrid" class="product-card-grid">
+            <!-- Rendered dynamically -->
+          </div>
+        </section>
+
+
+        <!-- ================= 3. VIEW: ĐƠN HÀNG & SHIP ================= -->
+        <section id="view-orders" style="display: none;">
+          <div class="fintab-page-header">
+            <div class="page-title-group">
+              <h1>📦 Quản Lý Đơn Hàng & Vận Chuyển</h1>
+              <p>Luồng đồng bộ trạng thái đơn hàng, mã vận đơn bưu cục và đồng hồ tự động giải ngân sau 5 ngày (120h).</p>
+            </div>
+            <div class="page-actions-group">
+              <button class="btn-fintab btn-fintab-outline" onclick="loadOrders()">🔄 Cập nhật</button>
+            </div>
+          </div>
+
+          <div class="table-card">
+            <div class="table-responsive">
+              <table class="fintab-table">
+                <thead>
+                  <tr>
+                    <th>Mã Đơn Hàng</th>
+                    <th>Sản Phẩm</th>
+                    <th>Bên Mua / Bên Bán</th>
+                    <th>Tổng Tiền</th>
+                    <th>Phương Thức Nhận</th>
+                    <th>Trạng Thái Đơn</th>
+                    <th>Đồng Hồ Bảo Vệ 5 Ngày</th>
+                    <th style="text-align: right;">Hành Động</th>
+                  </tr>
+                </thead>
+                <tbody id="ordersTableBody">
+                  <!-- Rendered dynamically -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+
+        <!-- ================= 4. VIEW: FINTAB THU CHI (TRANSACTIONS / DEPOSIT) ================= -->
+        <section id="view-transactions" style="display: none;">
+          <div class="fintab-page-header">
+            <div class="page-title-group">
+              <h1>💵 Sổ Quỹ Thu Chi & Giao Dịch Tài Chính</h1>
+              <p>Quản lý toàn diện các khoản tiền nạp (Deposit), tiền chi giải ngân, phí sàn 3% và két Escrow bảo vệ an toàn 100%.</p>
+            </div>
+            <div class="page-actions-group">
+              <button class="btn-fintab btn-fintab-primary" onclick="openTopupModal()">+ Lập Phiếu Thu (VietQR)</button>
+              <button class="btn-fintab btn-fintab-outline" onclick="openWithdrawModal()">⤓ Lập Phiếu Chi (Rút tiền)</button>
+            </div>
+          </div>
+
+          <!-- Fintab Summary Strip (Deposit / Payment / Balance) -->
+          <div class="fintab-summary-strip">
+            <div class="strip-item">
+              <span class="strip-label">Tổng Thu Trong Kỳ (Deposit)</span>
+              <div id="stripTotalIncome" class="strip-val-in">+ 1.779.000 đ</div>
+              <span style="font-size: 11px; color: var(--text-muted); margin-top: 2px;">Tiền nạp ví & Tiền bán giải ngân</span>
+            </div>
+
+            <div class="strip-item">
+              <span class="strip-label">Tổng Chi Trong Kỳ (Payment)</span>
+              <div id="stripTotalExpense" class="strip-val-out">- 139.000 đ</div>
+              <span style="font-size: 11px; color: var(--text-muted); margin-top: 2px;">Mua gói đẩy bài & Rút về ngân hàng</span>
+            </div>
+
+            <div class="strip-item">
+              <span class="strip-label">Tồn Quỹ Khả Dụng</span>
+              <div id="stripAvailableBal" class="strip-val-avail">250.000 đ</div>
+              <span style="font-size: 11px; color: var(--text-muted); margin-top: 2px;">Sẵn sàng thanh toán tức thì</span>
+            </div>
+
+            <div class="strip-item">
+              <span class="strip-label">Két Tạm Giữ Escrow</span>
+              <div id="stripEscrowBal" class="strip-val-escrow">55.000 đ</div>
+              <span style="font-size: 11px; color: #D97706; font-weight: 600; margin-top: 2px;">🔒 Bảo hiểm an toàn 5 ngày</span>
+            </div>
+          </div>
+
+          <!-- Filter Toolbar for Thu Chi -->
+          <div class="filter-toolbar">
+            <div class="filter-group-left">
+              <div class="btn-pill-group">
+                <button class="btn-pill-item active" onclick="setTransactionTab('all', this)">Tất cả chứng từ</button>
+                <button class="btn-pill-item" onclick="setTransactionTab('deposit', this)">📥 Phiếu thu (Deposit)</button>
+                <button class="btn-pill-item" onclick="setTransactionTab('payment', this)">📤 Phiếu chi (Payment)</button>
+                <button class="btn-pill-item" onclick="setTransactionTab('escrow', this)">🔒 Tạm giữ Escrow</button>
+              </div>
+
+              <input type="text" id="transactionSearchInput" class="filter-select" placeholder="Tìm theo mã PT/PC, nội dung..." style="width: 220px;" oninput="loadTransactionsTable()">
+
+              <label style="display: flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 600; color: var(--text-muted); margin-left: 8px;">
+                <input type="checkbox" id="chkViewAllLedger" onchange="loadTransactionsTable()">
+                <span>Xem sổ quỹ toàn sàn (Admin mode)</span>
+              </label>
+            </div>
+
+            <div>
+              <button class="btn-fintab btn-fintab-outline" onclick="loadTransactionsTable()">🔄 Tải lại sổ quỹ</button>
+            </div>
+          </div>
+
+          <!-- Fintab Transactions / Deposit Table -->
+          <div class="table-card">
+            <div class="table-responsive">
+              <table class="fintab-table">
+                <thead>
+                  <tr>
+                    <th>Mã Chứng Từ</th>
+                    <th>Ngày Ghi Sổ</th>
+                    <th>Loại Chứng Từ</th>
+                    <th>Đối Tượng Phát Sinh</th>
+                    <th>Nội Dung Hạch Toán</th>
+                    <th>Phương Thức</th>
+                    <th style="text-align: right;">Số Tiền Phát Sinh</th>
+                    <th>Trạng Thái</th>
+                    <th style="text-align: right;">Thao Tác</th>
+                  </tr>
+                </thead>
+                <tbody id="transactionsTableBody">
+                  <!-- Injected via JS -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+
+        <!-- ================= 5. VIEW: GÓI ĐẨY TIN ================= -->
+        <section id="view-packages" style="display: none;">
+          <div class="fintab-page-header">
+            <div class="page-title-group">
+              <h1>🚀 Gói Đẩy Bài Viết Lên Đầu Tìm Kiếm</h1>
+              <p>Mô hình định giá áp dụng hiệu ứng chim mồi (Decoy Effect) — Khấu trừ trực tiếp từ Ví TakeTwo, không chuyển khoản lẻ 15.000đ.</p>
+            </div>
+            <div style="background: #EFF6FF; border: 1px solid #BFDBFE; padding: 10px 16px; border-radius: var(--radius-md); display: flex; align-items: center; gap: 12px;">
+              <span style="font-size: 22px;">💳</span>
+              <div>
+                <div style="font-size: 11px; color: var(--text-muted); text-transform: uppercase; font-weight: 700;">Ví TakeTwo Của Bạn</div>
+                <div style="font-size: 13.5px; font-weight: 700; color: var(--text-title);">
+                  Số dư: <span id="packagesWalletBal" style="color: var(--primary);">250.000 đ</span> • Đang có: <span id="packagesCurrentCredits" style="color: #D97706; font-weight: 800;">2 lượt</span> đẩy VIP
+                </div>
+              </div>
+              <button class="btn-fintab btn-fintab-primary" style="padding: 4px 10px; font-size: 11.5px; margin-left: 6px;" onclick="openTopupModal()">+ Nạp Tiền</button>
+            </div>
+          </div>
+
+          <div id="packagesGrid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px;">
+            <!-- Rendered dynamically -->
+          </div>
+        </section>
+
+
+        <!-- ================= 6. VIEW: TRỌNG TÀI TRANH CHẤP ================= -->
+        <section id="view-disputes" style="display: none;">
+          <div class="fintab-page-header">
+            <div class="page-title-group">
+              <h1>⚖️ Ban Trọng Tài Xử Lý Khiếu Nại & Báo Cáo 5 KPIs</h1>
+              <p>Admin đối soát chứng từ tranh chấp và thực thi phán quyết: Hoàn tiền 100% cho Buyer hoặc Giải ngân cho Seller.</p>
+            </div>
+          </div>
+
+          <div class="kpi-grid" style="margin-bottom: 24px;">
+            <div class="kpi-card">
+              <span class="kpi-label">North Star Metric</span>
+              <div id="metricNorthStar" class="kpi-value" style="color: var(--primary);">0</div>
+              <div class="kpi-footer">Giao dịch 2 phía xác nhận thành công</div>
+            </div>
+            <div class="kpi-card">
+              <span class="kpi-label">GMV Thật Đã Hoàn Tất</span>
+              <div id="metricGMV" class="kpi-value" style="color: #10B981;">0 đ</div>
+              <div class="kpi-footer">Doanh số hàng thật qua nền tảng</div>
+            </div>
+            <div class="kpi-card">
+              <span class="kpi-label">Tin Đăng Thật Hoạt Động</span>
+              <div id="metricActiveListings" class="kpi-value" style="color: #D97706;">8</div>
+              <div class="kpi-footer">Vượt chỉ tiêu Gate W12</div>
+            </div>
+            <div class="kpi-card">
+              <span class="kpi-label">Tỷ Lệ Seller Quay Lại</span>
+              <div id="metricRepeatRate" class="kpi-value" style="color: #7C3AED;">100%</div>
+              <div class="kpi-footer">Người bán đăng từ 2 sản phẩm trở lên</div>
+            </div>
+          </div>
+
+          <div class="table-card">
+            <div style="padding: 14px 18px; border-bottom: 1px solid var(--border);">
+              <div style="font-size: 14px; font-weight: 700; color: var(--text-title);">Đơn Hàng Đang Khiếu Nại Cần Trọng Tài Can Thiệp</div>
+            </div>
+            <div class="table-responsive">
+              <table class="fintab-table">
+                <thead>
+                  <tr>
+                    <th>Mã Đơn</th>
+                    <th>Sản Phẩm</th>
+                    <th>Người Mua</th>
+                    <th>Lý Do Khiếu Nại</th>
+                    <th>Tiền Đóng Băng</th>
+                    <th style="text-align: right;">Phán Quyết Của Ban Quản Trị</th>
+                  </tr>
+                </thead>
+                <tbody id="adminDisputesBody">
+                  <!-- Rendered dynamically -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+      </main>
+    </div>
+  </div>
+
+
+  <!-- ================= FINTAB MODALS ================= -->
+
+  <!-- 1. CHECKOUT MODAL (THANH TOÁN & SHIP VÍ ESCROW) -->
+  <div id="modalCheckout" class="fintab-modal-overlay">
+    <div class="fintab-modal-dialog" style="max-width: 520px;">
+      <div class="modal-header-bar">
+        <h3>🛒 Thanh Toán & Vận Chuyển (Ví Escrow 5 Ngày)</h3>
+        <button class="btn-close-modal" onclick="closeModal('modalCheckout')">&times;</button>
+      </div>
+      <div class="modal-content-body">
+        <!-- Item Overview -->
+        <div style="display: flex; gap: 12px; background: #F8FAFC; padding: 12px; border-radius: var(--radius-md); border: 1px solid var(--border); margin-bottom: 14px;">
+          <img id="checkoutProductImg" src="" style="width: 65px; height: 65px; object-fit: cover; border-radius: var(--radius-sm);">
+          <div style="flex: 1;">
+            <div id="checkoutProductTitle" style="font-weight: 700; font-size: 13.5px; color: var(--text-title); line-height: 1.3;">Tên SP</div>
+            <div id="checkoutProductPrice" style="font-size: 16px; font-weight: 800; color: var(--primary); margin: 3px 0;">0 đ</div>
+            <div id="checkoutSellerInfo" style="font-size: 11.5px; color: var(--text-muted);">Người bán: ...</div>
+          </div>
+        </div>
+
+        <!-- Recipient Information -->
+        <div style="margin-bottom: 14px; background: white; border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 12px;">
+          <div style="font-size: 12.5px; font-weight: 700; color: var(--text-title); margin-bottom: 8px;">👤 Thông Tin Người Nhận:</div>
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 8px;">
+            <div>
+              <label style="font-size: 11px; font-weight: 600; color: var(--text-muted); display: block; margin-bottom: 2px;">Tên người nhận (*):</label>
+              <input type="text" id="checkoutRecipientName" class="filter-select" style="width: 100%; padding: 6px 8px; font-size: 12.5px;" value="Vũ Hán Tuấn">
+            </div>
+            <div>
+              <label style="font-size: 11px; font-weight: 600; color: var(--text-muted); display: block; margin-bottom: 2px;">Số điện thoại (*):</label>
+              <input type="text" id="checkoutRecipientPhone" class="filter-select" style="width: 100%; padding: 6px 8px; font-size: 12.5px;" value="0987.654.321">
+            </div>
+          </div>
+        </div>
+
+        <!-- Delivery / Shipping Method (3 Options) -->
+        <div style="margin-bottom: 14px;">
+          <label style="font-size: 12.5px; font-weight: 700; color: var(--text-title); display: block; margin-bottom: 6px;">🚚 Phương Thức Giao Hàng (Ship):</label>
+          <div style="display: flex; flex-direction: column; gap: 8px;">
+            <label style="display: flex; align-items: flex-start; gap: 10px; padding: 10px; border: 1px solid var(--border); border-radius: var(--radius-sm); cursor: pointer; background: white;">
+              <input type="radio" name="deliveryType" value="CAMPUS_MEETUP" checked onchange="updateCheckoutTotal()">
+              <div>
+                <div style="font-weight: 600; font-size: 13px;">🤝 Gặp trực tiếp tại trường / KTX (Miễn phí - 0 đ)</div>
+                <div id="checkoutMeetupAddress" style="font-size: 11.5px; color: var(--text-muted);">Sảnh KTX Dom A • Hẹn gặp kiểm tra đồ trực tiếp</div>
+              </div>
+            </label>
+
+            <label style="display: flex; align-items: flex-start; gap: 10px; padding: 10px; border: 1px solid var(--border); border-radius: var(--radius-sm); cursor: pointer; background: white;">
+              <input type="radio" name="deliveryType" value="COURIER_ROOM" onchange="updateCheckoutTotal()">
+              <div>
+                <div style="font-weight: 600; font-size: 13px;">🛵 Ship nội khu / Giao tận phòng trọ, KTX (+15.000 đ)</div>
+                <div style="font-size: 11.5px; color: var(--text-muted);">Bưu tá giao tận cửa phòng trong ngày • Có mã tracking</div>
+              </div>
+            </label>
+
+            <label style="display: flex; align-items: flex-start; gap: 10px; padding: 10px; border: 1px solid var(--border); border-radius: var(--radius-sm); cursor: pointer; background: white;">
+              <input type="radio" name="deliveryType" value="COURIER_EXPRESS" onchange="updateCheckoutTotal()">
+              <div>
+                <div style="font-weight: 600; font-size: 13px;">⚡ Giao hàng nhanh nội thành bưu cục (+25.000 đ)</div>
+                <div style="font-size: 11.5px; color: var(--text-muted);">Giao hỏa tốc 2h - 4h qua Ahamove / ViettelPost</div>
+              </div>
+            </label>
+          </div>
+        </div>
+
+        <!-- Address input for shipping -->
+        <div id="courierAddressGroup" style="margin-bottom: 14px; display: none;">
+          <label style="font-size: 12px; font-weight: 600; color: var(--text-title); display: block; margin-bottom: 4px;">📍 Địa chỉ nhận hàng chi tiết (*):</label>
+          <input type="text" id="checkoutDeliveryAddress" class="filter-select" style="width: 100%; padding: 8px; font-size: 12.5px;" placeholder="Ví dụ: Phòng 304, KTX Dom E, ĐHQG Hòa Lạc hoặc Số 12 ngõ 95 Chùa Bộc">
+        </div>
+
+        <!-- Payment Method: Escrow Wallet -->
+        <div style="background: #EFF6FF; border: 1px solid #BFDBFE; border-radius: var(--radius-md); padding: 12px; margin-bottom: 14px;">
+          <div style="display: flex; justify-content: space-between; align-items: center;">
+            <span style="font-weight: 700; font-size: 13px; color: var(--primary);">💳 Thanh Toán Qua Ví TakeTwo (Két Escrow)</span>
+            <span id="checkoutCurrentBalance" style="font-size: 12px; font-weight: 700; color: #1E40AF;">Khả dụng: 250.000 đ</span>
+          </div>
+          <p style="font-size: 11.5px; color: #1E40AF; margin-top: 4px; line-height: 1.4;">
+            🛡️ <strong>Cơ chế bảo vệ 5 ngày:</strong> Tiền được đóng băng an toàn trong két TakeTwo. Người bán chỉ nhận được tiền khi bạn bấm "Xác nhận đã nhận hàng" hoặc sau 5 ngày tự động hoàn tất.
+          </p>
+        </div>
+
+        <!-- Billing Calculation -->
+        <div style="border-top: 1px solid var(--border); padding-top: 12px; font-size: 12.5px;">
+          <div style="display: flex; justify-content: space-between; margin-bottom: 4px;">
+            <span>Tiền hàng:</span>
+            <span id="billItemAmount" style="font-weight: 600;">0 đ</span>
+          </div>
+          <div style="display: flex; justify-content: space-between; margin-bottom: 4px;">
+            <span>Phí giao hàng (Ship):</span>
+            <span id="billShippingFee" style="font-weight: 600;">0 đ</span>
+          </div>
+          <div style="display: flex; justify-content: space-between; margin-bottom: 4px; color: #10B981; font-weight: 600;">
+            <span>Voucher sinh viên thân thiết:</span>
+            <span>- 5.000 đ</span>
+          </div>
+          <div style="display: flex; justify-content: space-between; margin-top: 8px; padding-top: 8px; border-top: 1px dashed var(--border); font-size: 15px; font-weight: 800;">
+            <span>Tổng thanh toán:</span>
+            <span id="billTotalAmount" style="color: var(--primary);">0 đ</span>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer-bar">
+        <button class="btn-fintab btn-fintab-outline" onclick="closeModal('modalCheckout')">Hủy</button>
+        <button id="btnConfirmCheckout" class="btn-fintab btn-fintab-primary" onclick="submitCheckout()">🔒 Xác Nhận & Giữ Chỗ Tiền</button>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- 2. VIETQR TOP-UP MODAL -->
+  <div id="modalTopup" class="fintab-modal-overlay">
+    <div class="fintab-modal-dialog" style="max-width: 440px;">
+      <div class="modal-header-bar">
+        <h3>📱 Nạp Tiền Vào Ví Qua VietQR</h3>
+        <button class="btn-close-modal" onclick="closeModal('modalTopup')">&times;</button>
+      </div>
+      <div class="modal-content-body" style="text-align: center;">
+        <p style="font-size: 12.5px; color: var(--text-muted); margin-bottom: 14px;">
+          Nạp tiền một lần để mua đồ cũ và mua các gói đẩy tin mà không cần chuyển khoản 15k lắt nhắt!
+        </p>
+
+        <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; margin-bottom: 14px;">
+          <button class="btn-pill-item" style="border: 1px solid var(--border);" onclick="setTopupAmount(50000)">50k</button>
+          <button class="btn-pill-item active" style="border: 1px solid var(--border);" onclick="setTopupAmount(100000)">100k</button>
+          <button class="btn-pill-item" style="border: 1px solid var(--border);" onclick="setTopupAmount(200000)">200k</button>
+          <button class="btn-pill-item" style="border: 1px solid var(--border);" onclick="setTopupAmount(500000)">500k</button>
+        </div>
+
+        <input type="number" id="topupCustomAmount" class="filter-select" value="100000" style="text-align: center; font-size: 18px; font-weight: 800; color: var(--primary); width: 100%; margin-bottom: 14px;">
+
+        <div style="background: #F8FAFC; border: 1.5px dashed var(--primary-border); border-radius: var(--radius-md); padding: 14px; margin-bottom: 16px; display: inline-block;">
+          <img id="qrMockupImg" src="https://api.qrserver.com/v1/create-qr-code/?size=170x170&data=TAKETWO-TOPUP-100000" style="width: 150px; height: 150px; border-radius: 6px;">
+          <div style="font-size: 11.5px; font-weight: 700; color: var(--primary); margin-top: 6px;">VIETQR PRO 24/7</div>
+          <div style="font-size: 11px; color: var(--text-muted);">MBBank • STK: 8888-TAKETWO • Nội dung: T2NAP <span id="topupUserCode">HE194875</span></div>
+        </div>
+
+        <button class="btn-fintab btn-fintab-primary" style="width: 100%; padding: 10px; font-size: 13.5px;" onclick="simulateTopupSuccess()">
+          ⚡ [Mô Phỏng] Quét Mã Chuyển Khoản Thành Công
+        </button>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- 3. WITHDRAW MODAL -->
+  <div id="modalWithdraw" class="fintab-modal-overlay">
+    <div class="fintab-modal-dialog" style="max-width: 440px;">
+      <div class="modal-header-bar">
+        <h3>⤓ Rút Tiền Về Tài Khoản Ngân Hàng</h3>
+        <button class="btn-close-modal" onclick="closeModal('modalWithdraw')">&times;</button>
+      </div>
+      <div class="modal-content-body">
+        <div style="margin-bottom: 14px;">
+          <span style="font-size: 12px; color: var(--text-muted);">Số dư khả dụng có thể rút:</span>
+          <div id="withdrawAvailableDisplay" style="font-size: 18px; font-weight: 800; color: var(--primary);">250.000 đ</div>
+        </div>
+        <div style="margin-bottom: 12px;">
+          <label style="font-size: 12px; font-weight: 600; display: block; margin-bottom: 4px;">Số tiền muốn rút (tối thiểu 20.000đ):</label>
+          <input type="number" id="withdrawAmount" class="filter-select" style="width: 100%; padding: 8px;" placeholder="Ví dụ: 100000">
+        </div>
+        <div style="margin-bottom: 12px;">
+          <label style="font-size: 12px; font-weight: 600; display: block; margin-bottom: 4px;">Ngân hàng thụ hưởng:</label>
+          <select id="withdrawBankName" class="filter-select" style="width: 100%; padding: 8px;">
+            <option value="MBBank">MBBank (Ngân hàng Quân Đội)</option>
+            <option value="Vietcombank">Vietcombank</option>
+            <option value="Techcombank">Techcombank</option>
+            <option value="TPBank">TPBank</option>
+          </select>
+        </div>
+        <div style="margin-bottom: 12px;">
+          <label style="font-size: 12px; font-weight: 600; display: block; margin-bottom: 4px;">Số tài khoản chính chủ:</label>
+          <input type="text" id="withdrawAccountNum" class="filter-select" style="width: 100%; padding: 8px;" placeholder="Nhập số tài khoản thẻ sinh viên...">
+        </div>
+      </div>
+      <div class="modal-footer-bar">
+        <button class="btn-fintab btn-fintab-outline" onclick="closeModal('modalWithdraw')">Hủy</button>
+        <button class="btn-fintab btn-fintab-primary" onclick="submitWithdraw()">Xác Nhận Rút Tiền</button>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- 4. 1-CLICK BUMP MODAL -->
+  <div id="modalBump" class="fintab-modal-overlay">
+    <div class="fintab-modal-dialog">
+      <div class="modal-header-bar">
+        <h3>🚀 Đẩy Bài 1-Click Lên Top 1 (Trừ Trực Tiếp Ví)</h3>
+        <button class="btn-close-modal" onclick="closeModal('modalBump')">&times;</button>
+      </div>
+      <div class="modal-content-body">
+        <div id="bumpProductSummary" style="font-weight: 700; margin-bottom: 10px; color: var(--text-title);">...</div>
+        <p style="font-size: 12.5px; color: var(--text-muted); margin-bottom: 16px;">
+          Chọn gói đẩy tin để bài viết hiển thị nổi bật ở đầu trang tìm kiếm. Tiền được trừ tự động trong 0,5 giây:
+        </p>
+        <div id="bumpModalPackagesList" style="display: flex; flex-direction: column; gap: 10px;">
+          <!-- Injected dynamically -->
+        </div>
+      </div>
+      <div class="modal-footer-bar">
+        <button class="btn-fintab btn-fintab-outline" onclick="closeModal('modalBump')">Đóng</button>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- 5. CREATE NEW LISTING MODAL -->
+  <div id="modalCreateListing" class="fintab-modal-overlay">
+    <div class="fintab-modal-dialog" style="max-width: 580px;">
+      <div class="modal-header-bar">
+        <h3>📝 Đăng Bán Đồ Cũ Sinh Viên</h3>
+        <button class="btn-close-modal" onclick="closeModal('modalCreateListing')">&times;</button>
+      </div>
+      <div class="modal-content-body">
+        <div style="margin-bottom: 12px;">
+          <label style="font-size: 12px; font-weight: 600; display: block; margin-bottom: 4px;">Tên món đồ (*):</label>
+          <input type="text" id="newPostTitle" class="filter-select" style="width: 100%; padding: 8px;" placeholder="Ví dụ: Giáo trình Cấu trúc dữ liệu & Giải thuật FPTU">
+        </div>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 12px;">
+          <div>
+            <label style="font-size: 12px; font-weight: 600; display: block; margin-bottom: 4px;">Danh mục (*):</label>
+            <select id="newPostCategory" class="filter-select" style="width: 100%; padding: 8px;">
+              <option value="books">📚 Giáo trình & Học tập</option>
+              <option value="living">🛏️ Đồ trọ & KTX</option>
+              <option value="electronics">💻 Điện tử & Phụ kiện</option>
+              <option value="fashion">👕 Thời trang SV</option>
+            </select>
+          </div>
+          <div>
+            <label style="font-size: 12px; font-weight: 600; display: block; margin-bottom: 4px;">Độ mới (*):</label>
+            <select id="newPostCondition" class="filter-select" style="width: 100%; padding: 8px;">
+              <option value="Như mới 99%">Như mới 99%</option>
+              <option value="Tốt 90%">Tốt 90%</option>
+              <option value="Khá 80%">Khá 80%</option>
+            </select>
+          </div>
+        </div>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 12px;">
+          <div>
+            <label style="font-size: 12px; font-weight: 600; display: block; margin-bottom: 4px;">Giá pass lại (VNĐ) (*):</label>
+            <input type="number" id="newPostPrice" class="filter-select" style="width: 100%; padding: 8px;" placeholder="Ví dụ: 65000">
+          </div>
+          <div>
+            <label style="font-size: 12px; font-weight: 600; display: block; margin-bottom: 4px;">Giá gốc ban đầu (VNĐ):</label>
+            <input type="number" id="newPostOriginalPrice" class="filter-select" style="width: 100%; padding: 8px;" placeholder="Ví dụ: 150000">
+          </div>
+        </div>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 12px;">
+          <div>
+            <label style="font-size: 12px; font-weight: 600; display: block; margin-bottom: 4px;">Cụm trường ĐH Hà Nội (*):</label>
+            <select id="newPostCampusCluster" class="filter-select" style="width: 100%; padding: 8px;">
+              <option value="Hòa Lạc">Cụm Hòa Lạc (ĐH FPT / ĐHQG)</option>
+              <option value="Cầu Giấy - Xuân Thủy">Cụm Cầu Giấy - Xuân Thủy</option>
+              <option value="Bách - Kinh - Xây">Cụm Bách - Kinh - Xây</option>
+              <option value="Đống Đa - Chùa Láng">Cụm Đống Đa - Chùa Láng</option>
+              <option value="Hà Đông - Thanh Xuân">Cụm Hà Đông - Thanh Xuân</option>
+            </select>
+          </div>
+          <div>
+            <label style="font-size: 12px; font-weight: 600; display: block; margin-bottom: 4px;">Điểm hẹn gợi ý (*):</label>
+            <input type="text" id="newPostMeetupLocation" class="filter-select" style="width: 100%; padding: 8px;" placeholder="Ví dụ: Sảnh Dom A, KTX ĐH FPT">
+          </div>
+        </div>
+        <div style="margin-bottom: 12px;">
+          <label style="font-size: 12px; font-weight: 600; display: block; margin-bottom: 4px;">Mô tả khuyết điểm thực tế (*):</label>
+          <textarea id="newPostDefectNote" class="filter-select" style="width: 100%; padding: 8px; height: 60px;" placeholder="Ghi rõ khuyết điểm nếu có để nâng cao uy tín"></textarea>
+        </div>
+        <div style="margin-bottom: 12px;">
+          <label style="font-size: 12px; font-weight: 600; display: block; margin-bottom: 4px;">Link ảnh sản phẩm:</label>
+          <input type="text" id="newPostImageUrl" class="filter-select" style="width: 100%; padding: 8px;" placeholder="https://... (Để trống dùng ảnh mặc định)">
+        </div>
+      </div>
+      <div class="modal-footer-bar">
+        <button class="btn-fintab btn-fintab-outline" onclick="closeModal('modalCreateListing')">Hủy</button>
+        <button class="btn-fintab btn-fintab-primary" onclick="submitCreateListing()">🚀 Đăng Tin Ngay</button>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- 6. DISPUTE MODAL -->
+  <div id="modalDispute" class="fintab-modal-overlay">
+    <div class="fintab-modal-dialog" style="max-width: 440px;">
+      <div class="modal-header-bar">
+        <h3>⚠️ Gửi Khiếu Nại Đơn Hàng</h3>
+        <button class="btn-close-modal" onclick="closeModal('modalDispute')">&times;</button>
+      </div>
+      <div class="modal-content-body">
+        <p style="font-size: 12.5px; color: var(--text-muted); margin-bottom: 14px;">
+          Đồng hồ bảo vệ 5 ngày sẽ được <strong>ĐÓNG BĂNG NGAY LẬP TỨC</strong>. Tiền tạm giữ vẫn ở két TakeTwo cho đến khi Admin giải quyết xong.
+        </p>
+        <input type="hidden" id="disputeOrderId">
+        <div style="margin-bottom: 12px;">
+          <label style="font-size: 12px; font-weight: 600; display: block; margin-bottom: 4px;">Lý do khiếu nại (*):</label>
+          <textarea id="disputeReasonInput" class="filter-select" style="width: 100%; padding: 8px; height: 75px;" placeholder="Ví dụ: Đã quá 3 ngày không liên lạc được người bán, hoặc hàng nhận được bị gãy vỡ khác với ảnh chụp trên bài..."></textarea>
+        </div>
+      </div>
+      <div class="modal-footer-bar">
+        <button class="btn-fintab btn-fintab-outline" onclick="closeModal('modalDispute')">Hủy</button>
+        <button class="btn-fintab btn-fintab-danger" onclick="submitDispute()">Gửi Khiếu Nại Cho Admin</button>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- 7. ELECTRONIC ACCOUNTING VOUCHER RECEIPT MODAL (FINTAB THU CHI) -->
+  <div id="modalVoucherReceipt" class="fintab-modal-overlay">
+    <div class="fintab-modal-dialog" style="max-width: 500px;">
+      <div class="modal-header-bar">
+        <h3 id="voucherModalTitle">📄 Chứng Từ Thu Chi Điện Tử</h3>
+        <button class="btn-close-modal" onclick="closeModal('modalVoucherReceipt')">&times;</button>
+      </div>
+      <div class="modal-content-body">
+        <div class="voucher-paper">
+          <div class="voucher-watermark">TAKETWO PAY</div>
+          <div style="text-align: center; border-bottom: 1px solid #E2E8F0; padding-bottom: 12px; margin-bottom: 16px;">
+            <div style="font-size: 11px; text-transform: uppercase; color: var(--text-muted); font-weight: 700;">HỆ THỐNG C2C SECONDHAND MARKETPLACE HÀ NỘI</div>
+            <h2 id="voucherHeaderType" style="font-size: 18px; font-weight: 800; color: var(--text-title); margin: 4px 0;">PHIẾU THU TIỀN ĐIỆN TỬ</h2>
+            <div style="font-size: 12px; color: var(--text-muted);">Mã chứng từ: <strong id="vReceiptCode" style="color: var(--primary);">PT-20261102-01</strong></div>
+            <div id="vReceiptDate" style="font-size: 11px; color: var(--text-light); margin-top: 2px;">Ngày ghi sổ: 02/11/2026 12:00</div>
+          </div>
+
+          <div style="font-size: 13px; line-height: 1.8; color: var(--text-main);">
+            <div style="display: flex; justify-content: space-between;">
+              <span style="color: var(--text-muted);">Đối tượng thực hiện:</span>
+              <strong id="vReceiptParty">Vũ Hán Tuấn (HE194875)</strong>
+            </div>
+            <div style="display: flex; justify-content: space-between;">
+              <span style="color: var(--text-muted);">Phương thức thanh toán:</span>
+              <span id="vReceiptMethod">VietQR MBBank</span>
+            </div>
+            <div style="display: flex; justify-content: space-between;">
+              <span style="color: var(--text-muted);">Nội dung nghiệp vụ:</span>
+              <span id="vReceiptDesc" style="text-align: right; max-width: 250px; font-weight: 500;">Nạp tiền vào ví TakeTwo</span>
+            </div>
+            <div style="display: flex; justify-content: space-between; border-top: 1px dashed #CBD5E1; margin-top: 8px; padding-top: 8px;">
+              <span style="font-weight: 700;">Số tiền phát sinh:</span>
+              <strong id="vReceiptAmount" style="font-size: 16px; color: #10B981;">+ 200.000 đ</strong>
+            </div>
+            <div style="display: flex; justify-content: space-between;">
+              <span style="color: var(--text-muted);">Số dư sau hạch toán:</span>
+              <strong id="vReceiptBalAfter" style="color: var(--primary);">250.000 đ</strong>
+            </div>
+          </div>
+
+          <div style="display: grid; grid-template-columns: 1fr 1fr; text-align: center; margin-top: 24px; padding-top: 16px; border-top: 1px solid #E2E8F0; font-size: 11.5px;">
+            <div>
+              <div style="font-weight: 700; color: var(--text-title);">Người Nộp / Nhận</div>
+              <div style="font-style: italic; color: var(--text-muted); margin-top: 2px;">(Ký điện tử)</div>
+              <div id="vSignUser" style="margin-top: 24px; font-weight: 600; color: var(--primary);">Vũ Hán Tuấn</div>
+            </div>
+            <div>
+              <div style="font-weight: 700; color: var(--text-title);">Thủ Quỹ / Sàn TakeTwo</div>
+              <div style="font-style: italic; color: var(--text-muted); margin-top: 2px;">(Đã đối soát sổ cái)</div>
+              <div style="margin-top: 24px; font-weight: 600; color: #10B981;">✓ THỦ QUỸ TAKETWO</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer-bar">
+        <button class="btn-fintab btn-fintab-outline" onclick="closeModal('modalVoucherReceipt')">Đóng</button>
+        <button class="btn-fintab btn-fintab-primary" onclick="showToast('Đang kết nối máy in chứng từ TakeTwo...', 'success')">🖨️ In Phiếu Chứng Từ</button>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- TOAST CONTAINER -->
+  <div id="toastContainer" class="toast-stack"></div>
+
+  <!-- MAIN SCRIPT -->
+  <script src="js/app.js"></script>
+</body>
+</html>
